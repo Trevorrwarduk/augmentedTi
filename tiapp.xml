@@ -15,7 +15,7 @@
     <url>http://www.softlywired.com</url>
     <description>not specified</description>
     <copyright>2012 by Softly Wired Limited</copyright>
-    <icon>appicon.png</icon>
+    <icon>augmentedTi.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
     <statusbar-style>default</statusbar-style>
