@@ -20,8 +20,7 @@ function retrieveGoogleFeed()
     var latitude    =    persHandler.retPersData({
         type :    'lat'
     });
-    //var apikey    =    'YOUR GOOGLE PLACES API KEY GOES HERE';
-    var apikey    =    'AIzaSyAiP_MLIJOv075-7KoaxNzHDs7ZIVkVGc4';
+    var apikey    =    'YOUR GOOGLE PLACES API KEY GOES HERE';
 
     var googleData    =    'https://maps.googleapis.com/maps/api/place/search/json?location='  +  latitude  +  ','  +  longitude  +  '&radius=5000&sensor=false&key='  +  apikey;
 
