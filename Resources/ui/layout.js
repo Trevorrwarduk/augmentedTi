@@ -174,7 +174,9 @@ var css    = {
             // Background Opacity
             bko :    0.75,
             // Icon Size
-            ics :    100
+            ics :    100,
+            // Font Color
+            fc :    '#ffffff',
         }
     }
 };

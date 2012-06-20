@@ -72,7 +72,7 @@ function showARDetail(inParam)
         right :    '30dp',
         text :    inParam.TITLE,
         textAlign :    'center',
-        color :    layout.css.hs.tbfnc,
+        color :    layout.css.ar.detail.fc,
         font : {
             fontFamily :    layout.css.hs.tbfnf,
             fontWeight :    layout.css.hs.tbfnw,
@@ -88,7 +88,7 @@ function showARDetail(inParam)
         editable :    false,
         value :    inParam.DESC,
         textAlign :    'center',
-        color :    layout.css.hs.tbfnc,
+        color :    layout.css.ar.detail.fc,
         font : {
             fontFamily :    layout.css.hs.tbfnf,
             fontWeight :    layout.css.hs.tbfnw,

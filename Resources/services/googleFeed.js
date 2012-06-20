@@ -21,7 +21,7 @@ function retrieveGoogleFeed()
         type :    'lat'
     });
     var apikey    =    'YOUR GOOGLE PLACES API KEY GOES HERE';
-
+    
     var googleData    =    'https://maps.googleapis.com/maps/api/place/search/json?location='  +  latitude  +  ','  +  longitude  +  '&radius=5000&sensor=false&key='  +  apikey;
 
     var xhrCall    =    Ti.Network.createHTTPClient();
