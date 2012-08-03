@@ -27,6 +27,7 @@ Titanium.UI.setBackgroundColor(layout.css.sbkc.ab);
 
 // Need to have android platform specific code.
 var androidPlatform    =    (Ti.Platform.osname  ==  'android')    ?    true    :    false;
+var iosPlatform    =    (Ti.Platform.osname  ==  'iphone'  ||  Ti.Platform.osname  ==  'ipad')    ?    true    :    false;
 
 // Local variable to store services accessibility
 var services    = {
@@ -56,8 +57,7 @@ var googleData    =    null;
  *
  * Removes the activity indicator if active.
  */
-function rotateDisplay()
-{
+function rotateDisplay() {
     var ars    =    require('/ui/screens/ARScreen');
 
     ars.rotateDisplay();
@@ -73,8 +73,7 @@ function rotateDisplay()
  *
  * Removes the activity indicator if active.
  */
-function loadARScreen()
-{
+function loadARScreen() {
     activity.activityMessage({
         MESS :    Ti.Locale.getString('A0004')
     });
@@ -83,9 +82,8 @@ function loadARScreen()
 
     activity.removeActivityIndicator();
 
-    var ars    =    require('/ui/screens/ARScreen');
-
-    var arWin    =    new ars.loadARScreen({
+    // var ars    =    require('/ui/screens/ARScreen'),
+    var arWin    =    require('/ui/screens/ARScreen').loadARScreen({
         DATA :    googleData,
         SERVICES :    services,
         ANDROID :    androidPlatform
@@ -104,8 +102,7 @@ function loadARScreen()
  *
  * Requires the module within the function to load only when needed.
  */
-function loadHomeScreen()
-{
+function loadHomeScreen() {
     var hs    =    require('/ui/screens/homeScreen');
 
     var hsWin    =    new hs.loadHomeScreen({
@@ -131,16 +128,15 @@ function loadHomeScreen()
  *
  */
 
-function processGoogleData(inParam)
-{
+function processGoogleData(inParam) {
     googleData    =    [];
 
     activity.activityMessage({
         MESS :    Ti.Locale.getString('A0003')
     });
 
-    if(inParam.DATA.results.length  >  0) {
-        for(var i    =    0; i  <  inParam.DATA.results.length; i++) {
+    if (inParam.DATA.results.length  >  0) {
+        for (var i    =    0; i  <  inParam.DATA.results.length; i++) {
             var currLocation    = {
                 lat :    persHandler.retPersData({
                     type :    'lat'
@@ -168,15 +164,13 @@ function processGoogleData(inParam)
                 vicinity :    inParam.DATA.results[i].vicinity
             });
         }
-        googleData.sort(function(aa, bb)
-        {
+        googleData.sort(function(aa, bb) {
             return aa.distance  -  bb.distance;
         });
         googleData.reverse();
 
         loadARScreen();
-    }
-    else {
+    } else {
         common.launchEvent({
             TYPE :    'ERROR',
             MESS :    'E0004'
@@ -194,8 +188,7 @@ function processGoogleData(inParam)
  *
  */
 
-function retrieveGoogleFeed(inParam)
-{
+function retrieveGoogleFeed(inParam) {
     activity.activityMessage({
         MESS :    Ti.Locale.getString('A0002')
     });
@@ -211,21 +204,18 @@ function retrieveGoogleFeed(inParam)
  * The first task is to get the devices current location.
  *
  */
-function nextLocationCheck(inParam)
-{
-    if(locationCount  <  2) {
+function nextLocationCheck(inParam) {
+    if (locationCount  <  2) {
         locationCount++;
         locations.retrieveCurrentPosition();
-    }
-    else {
+    } else {
         locationCount    =    0;
 
         retrieveGoogleFeed();
     }
 }
 
-function retrieveLocation()
-{
+function retrieveLocation() {
     activity.loadActivityIndicator({
         currWin :    homeWin
     });
@@ -242,14 +232,13 @@ function retrieveLocation()
  * FUNC: a passed internal function to be run after the tests.
  *
  */
-function checkServices(eData)
-{
+function checkServices(eData) {
     services.gpsON    =    common.checkGeoServices();
     services.gprsON    =    common.checkNetworkServices();
     services.compON    =    common.checkCompassServices();
     services.camera    =    common.checkCameraExists();
 
-    if(eData.FUNC) {
+    if (eData.FUNC) {
         eData.FUNC();
     }
 }
@@ -263,8 +252,7 @@ function checkServices(eData)
  * It also removes the activity indicator if it is active.
  */
 
-function handleError(inParam)
-{
+function handleError(inParam) {
     activity.removeActivityIndicator();
     alert(Ti.Locale.getString(inParam.MESS));
 }
@@ -275,14 +263,13 @@ function handleError(inParam)
  *
  * This function resets the modules variables to original settings
  */
-function resetVars()
-{
+function resetVars() {
     // Enables all variables to be reset after close of AR screen or app background process
-    if(!androidPlatform) {
+    if (iosPlatform) {
         Ti.Media.hideCamera();
     }
 
-    if(arWin) {
+    if (arWin) {
         arWin.close();
     }
     locationCount    =    0;
@@ -305,8 +292,7 @@ function resetVars()
  *
  * Needs to be at the end of the module as it calls other module specific functions.
  */
-function startApp()
-{
+function startApp() {
     resetVars();
 
     // Get the screen sizes and store in persistent data..
@@ -327,8 +313,7 @@ function startApp()
 /*
  * Process the fired events
  */
-function processGlobalListener(inParam)
-{
+function processGlobalListener(inParam) {
     /*
      * Process the required function here based on the parameters passed in.
      * Always include a type so that we can separate the events.
@@ -340,8 +325,7 @@ function processGlobalListener(inParam)
      *
      */
 
-    switch(inParam.TYPE)
-    {
+    switch(inParam.TYPE) {
         case "HOMECONTINUE":
             retrieveLocation();
             break;
@@ -368,12 +352,11 @@ function processGlobalListener(inParam)
 /*
  * Create the global event listener to handle application control
  */
-Ti.App.addEventListener('GLOBALLISTENER', function(inParam)
-{
+Ti.App.addEventListener('GLOBALLISTENER', function(inParam) {
     var gblParams    = {};
 
-    for(var paramKeyIn in inParam) {
-        if(inParam[paramKeyIn]) {
+    for (var paramKeyIn in inParam) {
+        if (inParam[paramKeyIn]) {
             gblParams[paramKeyIn]    =    inParam[paramKeyIn];
         }
     }
@@ -394,37 +377,33 @@ Ti.App.addEventListener('GLOBALLISTENER', function(inParam)
 *
 */
 // test for iOS 4+
-function isiOS4Plus()
-{
-    if(Titanium.Platform.name  ==  'iPhone OS') {
+function isiOS4Plus() {
+    if (Titanium.Platform.name  ==  'iPhone OS') {
         var version    =    Titanium.Platform.version.split(".");
         var major    =    parseInt(version[0], 10);
         // can only test this support on a 3.2+ device
-        if(major  >=  4) {
+        if (major  >=  4) {
             return true;
         }
     }
     return false;
 }
 
-if(isiOS4Plus()) {
+if (isiOS4Plus()) {
 
     var service;
 
-    Ti.App.addEventListener('resume', function(e)
-    {
+    Ti.App.addEventListener('resume', function(e) {
         startApp();
     });
-    Ti.App.addEventListener('resumed', function(e)
-    {
-        if(service  !==  null) {
+    Ti.App.addEventListener('resumed', function(e) {
+        if (service  !==  null) {
             service.stop();
             service.unregister();
         }
     });
 
-    Ti.App.addEventListener('pause', function(e)
-    {
+    Ti.App.addEventListener('pause', function(e) {
         activity.removeActivityIndicator();
         resetVars();
 
